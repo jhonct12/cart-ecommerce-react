@@ -3,13 +3,15 @@ import { Container, Nav, NavLink, Navbar, NavbarBrand } from "react-bootstrap";
 import { ReactComponent as Logo } from "../../assets/svg/logo.svg";
 
 import "./TopMenu.scss";
+import Cart from "../Cart";
 
-export default () => {
+export default ({ productCart }) => {
   return (
     <Navbar bg="dark" variant="dark" className="top-menu">
       <Container>
         <BrandNav></BrandNav>
-        <MenuNav></MenuNav>
+        {/*<MenuNav></MenuNav>*/}
+        <Cart productCart={productCart}></Cart>
       </Container>
     </Navbar>
   );

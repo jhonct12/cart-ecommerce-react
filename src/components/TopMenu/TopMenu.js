@@ -5,13 +5,17 @@ import { ReactComponent as Logo } from "../../assets/svg/logo.svg";
 import "./TopMenu.scss";
 import Cart from "../Cart";
 
-export default ({ productCart }) => {
+export default ({ productCart, getProductsCart, products }) => {
   return (
     <Navbar bg="dark" variant="dark" className="top-menu">
       <Container>
         <BrandNav></BrandNav>
         {/*<MenuNav></MenuNav>*/}
-        <Cart productCart={productCart}></Cart>
+        <Cart
+          productCart={productCart}
+          getProductsCart={getProductsCart}
+          products={products}
+        ></Cart>
       </Container>
     </Navbar>
   );

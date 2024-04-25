@@ -6,6 +6,7 @@ import { STORAGE_PRODUCT_CART, URL_API_PRODUCTS } from "./utils/constants";
 import { toast, ToastContainer } from "react-toastify";
 
 function App() {
+  console.log("enter here n veces");
   const products = useFetch(URL_API_PRODUCTS, null);
   const [productCart, setProductCart] = useState([]);
 
@@ -14,6 +15,8 @@ function App() {
 
     if (idsProductsCart) {
       setProductCart(idsProductsCart.split(","));
+    } else {
+      setProductCart([]);
     }
   };
 
@@ -22,8 +25,8 @@ function App() {
   }, []);
 
   const addProductCart = (id, name) => {
-    let idsProductsCart = productCart;
-    idsProductsCart.push(id);
+    let idsProductsCart = [...productCart];
+    idsProductsCart.push(String(id));
     setProductCart(idsProductsCart);
     localStorage.setItem(STORAGE_PRODUCT_CART, idsProductsCart);
     toast.success(`${name} añadido al carrito correctamente`);
@@ -31,7 +34,11 @@ function App() {
 
   return (
     <div>
-      <TopMenu productCart={productCart}></TopMenu>
+      <TopMenu
+        productCart={productCart}
+        getProductsCart={getProductsCart}
+        products={products}
+      ></TopMenu>
       <Products products={products} addProductCart={addProductCart}></Products>
       <ToastContainer
         position="bottom-left"

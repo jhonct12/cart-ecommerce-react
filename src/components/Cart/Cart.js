@@ -10,6 +10,7 @@ import { BASE_PATH, STORAGE_PRODUCT_CART } from "../../utils/constants";
 import {
   duplicateItemsArray,
   removeArrayDuplicates,
+  removeItemArray,
 } from "../../utils/arrayFunc";
 
 export default ({ productCart, getProductsCart, products }) => {
@@ -38,7 +39,20 @@ export default ({ productCart, getProductsCart, products }) => {
     getProductsCart();
   };
 
-  const increaseQuantity = (id) => {};
+  const increaseQuantity = (id) => {
+    const arrayItemsCart = [...productCart];
+    arrayItemsCart.push(String(id));
+    localStorage.setItem(STORAGE_PRODUCT_CART, arrayItemsCart);
+    getProductsCart();
+  };
+
+  const decreaseQuantity = (id) => {
+    const arrayItemsCart = [...productCart];
+
+    const result = removeItemArray(arrayItemsCart, String(id));
+    localStorage.setItem(STORAGE_PRODUCT_CART, result);
+    getProductsCart();
+  };
 
   return (
     <>
@@ -61,6 +75,8 @@ export default ({ productCart, getProductsCart, products }) => {
               products={products}
               productCart={productCart}
               idProductCart={idProductCart}
+              increaseQuantity={increaseQuantity}
+              decreaseQuantity={decreaseQuantity}
             ></CartContentProducts>
           ))}
         </div>
@@ -88,6 +104,8 @@ const CartContentProducts = ({
   products: { loading, result },
   productCart,
   idProductCart,
+  increaseQuantity,
+  decreaseQuantity,
 }) => {
   if (!loading && result) {
     return result.map((product, index) => {
@@ -99,6 +117,8 @@ const CartContentProducts = ({
             key={index}
             product={product}
             quantity={quantity}
+            increaseQuantity={increaseQuantity}
+            decreaseQuantity={decreaseQuantity}
           ></RenderProduct>
         );
       }
@@ -106,7 +126,12 @@ const CartContentProducts = ({
   }
 };
 
-const RenderProduct = ({ product, quantity }) => {
+const RenderProduct = ({
+  product,
+  quantity,
+  increaseQuantity,
+  decreaseQuantity,
+}) => {
   return (
     <div className="cart-content__product">
       <img alt={product.name} src={`${BASE_PATH}/${product.image}`}></img>
@@ -118,8 +143,8 @@ const RenderProduct = ({ product, quantity }) => {
         <div>
           <p>En Carrito: {quantity} ud.</p>
           <div>
-            <button>+</button>
-            <button>-</button>
+            <button onClick={() => increaseQuantity(product.id)}>+</button>
+            <button onClick={() => decreaseQuantity(product.id)}>-</button>
           </div>
         </div>
       </div>
